@@ -67,7 +67,7 @@ arcade.draw_rectangle_filled(center_x=152,
                              width=50,
                              height=70,
                              color=(208, 242, 14))
-
+# Top of window
 arcade.draw_circle_filled(center_x=152,
                           center_y=820,
                           radius=25,
@@ -75,6 +75,45 @@ arcade.draw_circle_filled(center_x=152,
 
 # ----- Right Tower ---------
 
+# Connecting arm
+arcade.draw_rectangle_filled(center_x=670,
+                             center_y=525,
+                             width=40,
+                             height=225,
+                             color=(0, 0, 0),
+                             tilt_angle=40)
+
+# Connecting Joint
+
+arcade.draw_rectangle_filled(center_x=736,
+                             center_y=700,
+                             width=40,
+                             height=200,
+                             color=(0, 0, 0))
+
+# Building top of tower
+arcade.draw_rectangle_filled(center_x=736,
+                             center_y=800,
+                             width=200,
+                             height=200,
+                             color=(0, 0, 0))
+
+# roof of tower
+arcade.draw_triangle_filled(x1=635,
+                            y1=900,
+                            x2=840,
+                            y2=900,
+                            x3=736,
+                            y3=970,
+                            color=(250, 10, 10))
+
+arcade.draw_ellipse_filled(center_x=736,
+                           center_y=800,
+                           width=80,
+                           height=100,
+                           color=(208, 242, 14),
+                           tilt_angle=0,
+                           num_segments=30,)
 
 # ----- Drawing Castle -----
 
@@ -84,6 +123,129 @@ arcade.draw_rectangle_filled(center_x=450,
                              width=350,
                              height=350,
                              color=arcade.csscolor.BLACK)
+
+# Second floor
+arcade.draw_rectangle_filled(center_x=450,
+                             center_y=740,
+                             width=300,
+                             height=180,
+                             color=arcade.csscolor.BLACK)
+
+# Third floor
+
+arcade.draw_rectangle_filled(center_x=450,
+                             center_y=900,
+                             width=250,
+                             height=200,
+                             color=arcade.csscolor.BLACK)
+
+# ------ Clock -------------
+
+arcade.draw_circle_filled(center_x=450,
+                          center_y=850,
+                          radius=75,
+                          color=arcade.csscolor.WHITE)
+
+# -------- Hour lines-----
+
+# 12
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=450,
+                 end_y=1000,
+                 color=(0, 0, 0),
+                 line_width=5)
+# 1
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=530,
+                 end_y=1000,
+                 color=(0, 0, 0),
+                 line_width=5)
+# 2
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=700,
+                 end_y=1000,
+                 color=(0, 0, 0),
+                 line_width=5)
+# 3
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=800,
+                 end_y=850,
+                 color=(0, 0, 0),
+                 line_width=5)
+# 4
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=800,
+                 end_y=650,
+                 color=(0, 0, 0),
+                 line_width=5)
+# 5
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=600,
+                 end_y=600,
+                 color=(0, 0, 0),
+                 line_width=5)
+# 6
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=450,
+                 end_y=450,
+                 color=(0, 0, 0),
+                 line_width=5)
+# 7
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=80,
+                 end_y=200,
+                 color=(0, 0, 0),
+                 line_width=5)
+# 8
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=150,
+                 end_y=670,
+                 color=(0, 0, 0),
+                 line_width=5)
+# 9
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=300,
+                 end_y=850,
+                 color=(0, 0, 0),
+                 line_width=5)
+# 10
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=200,
+                 end_y=1000,
+                 color=(0, 0, 0),
+                 line_width=5)
+# 11
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=373,
+                 end_y=1000,
+                 color=(0, 0, 0),
+                 line_width=5)
+
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=450,
+                 end_y=1000,
+                 color=(0, 0, 0),
+                 line_width=5)
+
+arcade.draw_line(start_x=450,
+                 start_y=850,
+                 end_x=450,
+                 end_y=1000,
+                 color=(0, 0, 0),
+                 line_width=5)
 
 # Window top left
 arcade.draw_rectangle_filled(center_x=350,

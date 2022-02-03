@@ -47,6 +47,42 @@ arcade.draw_arc_filled(300, 340, 60, 100, arcade.csscolor.DARK_GREEN, 0, 180)
 # Triangle is made of these three points:
 # (400, 400), (370, 320), (430,320)
 arcade.draw_rectangle_filled(400, 320, 20, 60, arcade.csscolor.SIENNA)
+<<<<<<< HEAD
+=======
+arcade.draw_triangle_filled(400, 400, 370, 320, 430, 320, arcade.csscolor.DARK_GREEN)
+
+# Draw a tree using polygon with a list of points
+arcade.draw_rectangle_filled(500, 320, 20, 60, arcade.csscolor.SIENNA)
+arcade.draw_polygon_filled(((500, 400),
+                            (480, 360),
+                            (470, 320),
+                            (530, 320),
+                            (520, 360)
+                            ),
+                           arcade.csscolor.DARK_GREEN)
+
+# draw a sun
+arcade.draw_circle_filled(500, 550, 40, arcade.color.YELLOW)
+
+# rays to the left right up and down
+arcade.draw_line(500, 550, 400, 550, arcade.color.YELLOW, 3)
+arcade.draw_line(500, 550, 600, 550, arcade.color.YELLOW, 3)
+arcade.draw_line(500, 550, 500, 450, arcade.color.YELLOW, 3)
+arcade.draw_line(500, 550, 500, 650, arcade.color.YELLOW, 3)
+
+# Diagonal Rays
+arcade.draw_line(500, 550, 550, 600, arcade.color.YELLOW, 3)
+arcade.draw_line(500, 550, 550, 500, arcade.color.YELLOW, 3)
+arcade.draw_line(500, 550, 450, 600, arcade.color.YELLOW, 3)
+arcade.draw_line(500, 550, 450, 500, arcade.color.YELLOW, 3)
+
+# Draw Text at (250, 230) with font size of 24 pt.
+arcade.draw_text("Arbor Day - Plant a Tree!",
+                 150, 230,
+                 arcade.color.BLACK, 24)
+
+
+>>>>>>> babfd5f8eb99047c390dc8eb096a44c084f86a5c
 
 # finish drawing
 arcade.finish_render()

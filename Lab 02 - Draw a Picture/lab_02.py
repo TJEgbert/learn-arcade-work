@@ -1,5 +1,7 @@
 """
 This program will draw a spooky building!
+Trevor Egbert
+1/29/2022
 """
 
 # Import arcade

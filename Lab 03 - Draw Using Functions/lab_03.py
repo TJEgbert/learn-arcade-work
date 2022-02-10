@@ -63,16 +63,16 @@ def draw_small_tower():
                                 color=(42, 42, 43))
 
 
-def draw_arch_window(x_location, y_location):
+def draw_arch_window(x, y):
     """Draws an arch window"""
-    arcade.draw_rectangle_filled(center_x=x_location,
-                                 center_y=y_location,
+    arcade.draw_rectangle_filled(center_x=x,
+                                 center_y=y,
                                  width=50,
                                  height=70,
                                  color=(189, 219, 21))
     # Top of window
-    arcade.draw_circle_filled(center_x=x_location,
-                              center_y=y_location + 30,
+    arcade.draw_circle_filled(center_x=x,
+                              center_y=y + 30,
                               radius=25,
                               color=(189, 219, 21))
 
@@ -114,10 +114,10 @@ def draw_big_tower():
                                 color=(42, 42, 43))
 
 
-def draw_oval_window(x_location, y_location):
+def draw_oval_window(x, y):
     """Draws an oval that you can place"""
-    arcade.draw_ellipse_filled(center_x=x_location,
-                               center_y=y_location,
+    arcade.draw_ellipse_filled(center_x=x,
+                               center_y=y,
                                width=80,
                                height=100,
                                color=(189, 219, 21),
@@ -149,10 +149,10 @@ def draw_main_building():
                                  color=arcade.csscolor.BLACK)
 
 
-def draw_rectangle_window(x_location, y_location):
+def draw_rectangle_window(x, y):
     """Draws rectangle window that can be placed"""
-    arcade.draw_rectangle_filled(center_x=x_location,
-                                 center_y=y_location,
+    arcade.draw_rectangle_filled(center_x=x,
+                                 center_y=y,
                                  width=50,
                                  height=100,
                                  color=(189, 219, 21))
@@ -167,36 +167,19 @@ def draw_door():
                                  color=(32, 22, 6))
 
 
-def draw_circle_window(location_x, location_y, horizontal_x_start, horizontal_y_start, horizontal_x_end,
-                       horizontal_y_end, vertical_x_start, vertical_y_start, vertical_x_end, vertical_y_end):
+def draw_circle_window(x, y):
     """Draws a window with cross design"""
     # Round part
-    arcade.draw_circle_filled(center_x=location_x,
-                              center_y=location_y,
+    arcade.draw_circle_filled(center_x=x,
+                              center_y=y,
                               radius=75,
                               color=(189, 219, 21))
 
-    # Right Line
-    arcade.draw_line(start_x=horizontal_x_start,
-                     start_y=horizontal_y_start,
-                     end_x=horizontal_x_end,
-                     end_y=horizontal_y_end,
-                     color=(0, 0, 0),
-                     line_width=5)
 
-    # Top Line
-    arcade.draw_line(start_x=vertical_x_start,
-                     start_y=vertical_y_start,
-                     end_x=vertical_x_end,
-                     end_y=vertical_y_end,
-                     color=(0, 0, 0),
-                     line_width=5)
-
-
-def draw_bigger_gravestone(x_location, y_location):
+def draw_bigger_gravestone(x, y):
     """Draw a bigger version of a gravestone"""
-    arcade.draw_arc_filled(center_x=x_location,
-                           center_y=y_location,
+    arcade.draw_arc_filled(center_x=x,
+                           center_y=y,
                            width=150,
                            height=200,
                            color=arcade.csscolor.GRAY,
@@ -206,19 +189,19 @@ def draw_bigger_gravestone(x_location, y_location):
                            num_segments=20)
 
     # Bottom of gravestone
-    arcade.draw_rectangle_filled(center_x=x_location,
-                                 center_y=y_location - 50,
+    arcade.draw_rectangle_filled(center_x=x,
+                                 center_y=y - 50,
                                  width=150,
                                  height=115,
                                  color=arcade.csscolor.GRAY)
 
 
-def draw_smaller_gravestone(x_location, y_location):
+def draw_smaller_gravestone(x, y):
     """Draw a smaller version of a gravestone"""
 
     # Top of Grave
-    arcade.draw_arc_filled(center_x=x_location,
-                           center_y=y_location,
+    arcade.draw_arc_filled(center_x=x,
+                           center_y=y,
                            width=113,
                            height=150,
                            color=arcade.csscolor.GRAY,
@@ -229,8 +212,8 @@ def draw_smaller_gravestone(x_location, y_location):
                            )
 
     # Bottom of gravestone
-    arcade.draw_rectangle_filled(center_x=x_location,
-                                 center_y=y_location - 45,
+    arcade.draw_rectangle_filled(center_x=x,
+                                 center_y=y - 45,
                                  width=112,
                                  height=100,
                                  color=arcade.csscolor.GRAY)
@@ -249,47 +232,56 @@ def main():
     """Drawing Left tower"""
     draw_left_joints()
     draw_small_tower()
-    draw_arch_window(x_location=152,
-                     y_location=790)
+    draw_arch_window(x=152,
+                     y=790)
 
     """Drawing right tower"""
     draw_right_joints()
     draw_big_tower()
-    draw_oval_window(x_location=736,
-                     y_location=800)
+    draw_oval_window(x=736,
+                     y=800)
 
     """Drawing main building with decorations"""
     draw_main_building()
-    draw_rectangle_window(x_location=350,
-                          y_location=550)
-    draw_rectangle_window(x_location=550,
-                          y_location=600)
-    draw_rectangle_window(x_location=550,
-                          y_location=450)
+    draw_arch_window(x=350,
+                     y=550)
+    draw_rectangle_window(x=550,
+                          y=600)
+    draw_rectangle_window(x=550,
+                          y=450)
     draw_door()
-    draw_circle_window(location_x=450,
-                       location_y=850,
-                       horizontal_x_start=525,
-                       horizontal_y_start=850,
-                       horizontal_x_end=375,
-                       horizontal_y_end=850,
-                       vertical_x_start=450,
-                       vertical_y_start=775,
-                       vertical_x_end=450,
-                       vertical_y_end=925)
+    """Draw window with cross design"""
+    draw_circle_window(x=450,
+                       y=850)
+
+    # Right Line
+    arcade.draw_line(start_x=525,
+                     start_y=850,
+                     end_x=375,
+                     end_y=850,
+                     color=(0, 0, 0),
+                     line_width=5)
+
+    # Top Line
+    arcade.draw_line(start_x=450,
+                     start_y=775,
+                     end_x=450,
+                     end_y=925,
+                     color=(0, 0, 0),
+                     line_width=5)
 
     """Drawing gravestones in the yard"""
-    draw_bigger_gravestone(x_location=200,
-                           y_location=200)
+    draw_smaller_gravestone(x=200,
+                            y=200)
     # Text On Grave
     arcade.draw_text(text="RIP",
                      start_x=170,
                      start_y=200,
                      color=arcade.csscolor.BLACK,
                      font_size=30)
-    draw_smaller_gravestone(x_location=100,
-                            y_location=370)
 
+    draw_smaller_gravestone(x=100,
+                            y=370)
     # Text On Grave
     arcade.draw_text(text="RIP",
                      start_x=65,
@@ -298,9 +290,8 @@ def main():
                      font_name=("Old English Text MT", "arial"),
                      font_size=25)
 
-    draw_smaller_gravestone(x_location=800,
-                            y_location=300)
-
+    draw_smaller_gravestone(x=800,
+                            y=300)
     # Text On Grave
     arcade.draw_text(text="RIP",
                      start_x=760,

@@ -42,7 +42,7 @@ def main():
         elif user_input.lower() == "d":
             camel_tiredness = 0
             print("The camel looks happy")
-            natives_miles_traveled = natives_miles_traveled + random.randrange(7, 14)
+            natives_miles_traveled = natives_miles_traveled + random.randrange(9, 14)
             if player_miles_traveled - natives_miles_traveled >= 0:
                 print("The natives are", player_miles_traveled - natives_miles_traveled, "miles behind you")
 
@@ -54,30 +54,33 @@ def main():
 
         # If the input is C ahead at full speed. Adjust parameters and prints out how far the player travel
         elif user_input.lower() == "c":
-            player_miles_traveled = player_miles_traveled + random.randrange(10, 20)
+            player_miles_traveled = player_miles_traveled + random.randrange(11, 19)
             thirst = thirst + 1
             camel_tiredness = camel_tiredness + random.randrange(1, 3)
-            natives_miles_traveled = natives_miles_traveled + random.randrange(7, 14)
+            natives_miles_traveled = natives_miles_traveled + random.randrange(10, 13)
             # 1/15 chance of find an oasis. Sets canteen back to 3 and camel_tiredness to 0
             if random.randrange(15) == 0:
                 print("You found an oasis!")
                 print("You refilled your canteen, and your camel looks well rested")
                 canteen = 3
                 camel_tiredness = 0
+                thirst = 0
             if player_miles_traveled < 200:
                 print("You have traveled:", player_miles_traveled, "miles")
 
         # If the input is B Ahead at moderate speed.  Adjust parameters and prints out how far the player travel
         elif user_input.lower() == "b":
-            player_miles_traveled = player_miles_traveled + random.randrange(5, 12)
+            player_miles_traveled = player_miles_traveled + random.randrange(7, 12)
             thirst = thirst + 1
             camel_tiredness = camel_tiredness + 1
+            natives_miles_traveled = natives_miles_traveled + random.randrange(6, 10)
             # 1/15 chance of find an oasis. Sets canteen back to 3 and camel_tiredness to 0
             if random.randrange(15) == 0:
                 print("You found an oasis!")
                 print("You refilled your canteen, and your camel looks well rested")
                 canteen = 3
                 camel_tiredness = 0
+                thirst = 0
             if player_miles_traveled < 200:
                 print("You have traveled:", player_miles_traveled, "miles")
 
@@ -100,12 +103,12 @@ def main():
             print("You are thirsty")
 
         # Checks to see if camel_tiredness is greater than or equal to 8 for a game over
-        if camel_tiredness >= 8:
+        if camel_tiredness >= 7:
             done = True
-            print("Your camel is dead! Game over")
+            print("Your camel is dead! Game over!")
 
         # Checks to see if the camel_tiredness is greater than of equal to 5 to print a warning message
-        elif camel_tiredness >= 5:
+        elif camel_tiredness >= 4:
             if not done:
                 print("Your camel is getting tired")
 
@@ -118,9 +121,11 @@ def main():
             print("The natives are getting closer")
 
         # Checks to see if player has traveled of 200 miles for win condition
-        if player_miles_traveled >= 200:
+        if camel_tiredness >= 7:
             done = True
-            print("You escape the natives to live another day!")
+        elif player_miles_traveled >= 200:
+            done = True
+            print("You escaped the natives to live another day!")
 
 
 main()

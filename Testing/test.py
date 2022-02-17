@@ -1,17 +1,6 @@
-def a(x):
-    print("A start, x =", x)
-    b(x+1)
-    print("A end x=", x)
+# Ask the user how many times to print
+repetitions = int(input("How many times should I repeat? "))
 
-
-def b(x):
-    print("B start, x =", x)
-    c(x + 1)
-    print("B end x=", x)
-
-
-def c(x):
-    print("C start and end, x =", x)
-
-
-a(5)
+# Loop that many times
+for i in range(repetitions):
+    print("I will not chew gum in class.")7

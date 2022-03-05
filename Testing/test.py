@@ -1,7 +1,19 @@
-0 % 3 = 0
-1 % 3 = 1
-2 % 3 = 2
-3 % 3 = 0
-4 % 3 = 1
-5 % 3 = 2
-6 % 3 = 0
+class Person():
+    def __init__(self):
+        self.name = ""
+        self.money = 0
+
+
+def main():
+    bob = Person()
+    bob.name = "Bob"
+    bob.money = 100
+
+    nancy = Person()
+    nancy.name = "Nancy"
+
+    print(bob.name, "has", bob.money, "dollars.")
+    print(nancy.name, "has", nancy.money, "dollars.")
+
+
+main()

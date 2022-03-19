@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import arcade
 
 SCREEN_WIDTH = 640
@@ -102,6 +103,24 @@ class MyGame(arcade.Window):
 def main():
     window = MyGame(640, 480, "Drawing Example")
     arcade.run()
+=======
+class Person():
+    def __init__(self):
+        self.name = ""
+        self.money = 0
+
+
+def main():
+    bob = Person()
+    bob.name = "Bob"
+    bob.money = 100
+
+    nancy = Person()
+    nancy.name = "Nancy"
+
+    print(bob.name, "has", bob.money, "dollars.")
+    print(nancy.name, "has", nancy.money, "dollars.")
+>>>>>>> ea9ea3fc67e9ba7bbcf3e86fbc442ddcf6b4a4b3
 
 
 main()

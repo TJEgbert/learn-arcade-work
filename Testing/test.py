@@ -1,126 +1,51 @@
-<<<<<<< HEAD
+"""
+Example of Pymunk Physics Engine Platformer
+"""
 import arcade
 
-SCREEN_WIDTH = 640
-SCREEN_HEIGHT = 480
-MOVEMENT_SPEED = 3
+SCREEN_TITLE = "PyMunk Platformer"
+
+# Size of screen to show, in pixels
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 
 
-class Ball:
-    def __init__(self, position_x, position_y, change_x, change_y, radius, color):
-
-        # Take the parameters of the init function above,
-        # and create instance variables out of them.
-        self.position_x = position_x
-        self.position_y = position_y
-        self.change_x = change_x
-        self.change_y = change_y
-        self.radius = radius
-        self.color = color
-
-    def draw(self):
-        """ Draw the balls with the instance variables we have. """
-        arcade.draw_circle_filled(self.position_x,
-                                  self.position_y,
-                                  self.radius, self.
-                                  color)
-
-    def update(self):
-        # Move the ball
-        self.position_y += self.change_y
-        self.position_x += self.change_x
-
-
-        # See if the ball hit the edge of the screen. If so, change direction
-
-        if self.position_x < self.radius:
-
-            self.position_x = self.radius
-
-
-
-        if self.position_x > SCREEN_WIDTH - self.radius:
-
-            self.position_x = SCREEN_WIDTH - self.radius
-
-
-
-        if self.position_y < self.radius:
-
-            self.position_y = self.radius
-
-
-
-        if self.position_y > SCREEN_HEIGHT - self.radius:
-
-            self.position_y = SCREEN_HEIGHT - self.radius
-
-
-
-class MyGame(arcade.Window):
+class GameWindow(arcade.Window):
+    """ Main Window """
 
     def __init__(self, width, height, title):
+        """ Create the variables """
 
-        # Call the parent class's init function
+        # Init the parent class
         super().__init__(width, height, title)
 
-        # Make the mouse disappear when it is over the window.
-        # So we just see our object, not the pointer.
-        self.set_mouse_visible(False)
-
-        arcade.set_background_color(arcade.color.ASH_GREY)
-
-        # Create our ball
-        self.ball = Ball(50, 50, 0, 0, 15, arcade.color.AUBURN)
-
-    def on_draw(self):
-        """ Called whenever we need to draw the window. """
-        arcade.start_render()
-        self.ball.draw()
-
-    def update(self, delta_time):
-        self.ball.update()
+    def setup(self):
+        """ Set up everything with the game """
+        pass
 
     def on_key_press(self, key, modifiers):
-        """ Called whenever the user presses a key. """
-        if key == arcade.key.LEFT:
-            self.ball.change_x = -MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
-            self.ball.change_x = MOVEMENT_SPEED
-        elif key == arcade.key.UP:
-            self.ball.change_y = MOVEMENT_SPEED
-        elif key == arcade.key.DOWN:
-            self.ball.change_y = -MOVEMENT_SPEED
+        """Called whenever a key is pressed. """
+        pass
 
     def on_key_release(self, key, modifiers):
-        """ Called whenever a user releases a key. """
-        if key == arcade.key.LEFT or key == arcade.key.RIGHT:
-            self.ball.change_x = 0
-        elif key == arcade.key.UP or key == arcade.key.DOWN:
-            self.ball.change_y = 0
+        """Called when the user releases a key. """
+        pass
+
+    def on_update(self, delta_time):
+        """ Movement and game logic """
+        pass
+
+    def on_draw(self):
+        """ Draw everything """
+        self.clear()
 
 
 def main():
-    window = MyGame(640, 480, "Drawing Example")
+    """ Main function """
+    window = GameWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    window.setup()
     arcade.run()
-=======
-class Person():
-    def __init__(self):
-        self.name = ""
-        self.money = 0
 
 
-def main():
-    bob = Person()
-    bob.name = "Bob"
-    bob.money = 100
-
-    nancy = Person()
-    nancy.name = "Nancy"
-
-    print(bob.name, "has", bob.money, "dollars.")
-    print(nancy.name, "has", nancy.money, "dollars.")
->>>>>>> ea9ea3fc67e9ba7bbcf3e86fbc442ddcf6b4a4b3
-
-
-main()
+if __name__ == "__main__":
+    main()

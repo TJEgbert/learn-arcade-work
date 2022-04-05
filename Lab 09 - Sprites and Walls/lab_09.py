@@ -75,7 +75,7 @@ class MyGame(arcade.Window):
 
         # Set up the player
         self.player_sprite = arcade.Sprite("platformChar_walk1.png",
-                                           scale=0.4)
+                                           scale=0.5)
         self.player_sprite.center_x = 60
         self.player_sprite.center_y = 60
         self.player_list.append(self.player_sprite)

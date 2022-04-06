@@ -37,21 +37,24 @@ class MyGame(arcade.Window):
 
         self.movement_block_list = None
         self.wall_list = None
+        self.test_list = None
 
         self.movement = False
         self.collision_with_wall = False
         self.physics_engine = None
+        self.key_pressed = False
 
     def setup(self):
 
         self.movement_block_list = arcade.SpriteList()
         self.movement_block = Player("tile_0024.png", scale=3)
 
-        self.movement_block.center_x = 500
-        self.movement_block.center_y = 500
+        self.movement_block.center_x = 400
+        self.movement_block.center_y = 250
         self.movement_block_list.append(self.movement_block)
 
         self.wall_list = arcade.SpriteList()
+        self.test_list = arcade.SpriteList()
         self.movement = False
 
         for x in range(0, 1080, 54):
@@ -78,6 +81,30 @@ class MyGame(arcade.Window):
             wall.center_y = y
             self.wall_list.append(wall)
 
+        for y in range(0, 1080, 54):
+            test = arcade.Sprite("platformPack_tile016.png", scale=1)
+            test.center_x = 950
+            test.center_y = y
+            self.test_list.append(test)
+
+        for y in range(0, 1080, 54):
+            test = arcade.Sprite("platformPack_tile016.png", scale=1)
+            test.center_x = 50
+            test.center_y = y
+            self.test_list.append(test)
+
+        for x in range(0, 1080, 400):
+            test = arcade.Sprite("platformPack_tile016.png", scale=1)
+            test.center_x = x
+            test.center_y = 400
+            self.test_list.append(test)
+
+        for x in range(0, 1080, 400):
+            wall = arcade.Sprite("tile_0018.png", scale=1)
+            wall.center_x = x
+            wall.center_y = 400
+            self.wall_list.append(wall)
+
         self.physics_engine = arcade.PhysicsEngineSimple(self.movement_block, self.wall_list)
 
     def on_draw(self):
@@ -85,6 +112,8 @@ class MyGame(arcade.Window):
         self.movement_block_list.draw()
 
         self.wall_list.draw()
+
+        self.test_list.draw()
 
     def on_update(self, delta_time):
 
@@ -94,33 +123,48 @@ class MyGame(arcade.Window):
 
         self.physics_engine.update()
 
-        wall_hit = arcade.check_for_collision_with_list(self.movement_block, self.wall_list)
-        if wall_hit:
-            print("hi")
+        test_hit_list = arcade.check_for_collision_with_list(self.movement_block, self.test_list)
+
+        if test_hit_list:
+            if self.movement_block.change_x or self.movement_block.change_y == 0:
+                if not self.collision_with_wall:
+                    self.collision_with_wall = True
+                    #self.movement = False
+                    self.key_pressed = False
+                    print(MOVEMENT_SPEED)
 
     def on_key_press(self, key, modifiers):
 
-        if not self.movement:
+        if not self.key_pressed:
 
             if key == arcade.key.UP:
                 self.movement_block.change_y = MOVEMENT_SPEED
+                self.key_pressed = True
             elif key == arcade.key.DOWN:
                 self.movement_block.change_y = - MOVEMENT_SPEED
+                self.key_pressed = True
             elif key == arcade.key.RIGHT:
                 self.movement_block.change_x = MOVEMENT_SPEED
+                self.key_pressed = True
             elif key == arcade.key.LEFT:
                 self.movement_block.change_x = - MOVEMENT_SPEED
+                self.key_pressed = True
 
     def on_key_release(self, key, modifiers):
 
         if key == arcade.key.UP:
-            self.movement = True
+            #self.movement = True
+            self.collision_with_wall = False
         elif key == arcade.key.DOWN:
-            self.movement = True
+            #self.movement = True
+            self.collision_with_wall = False
         elif key == arcade.key.LEFT:
-            self.movement = True
+            #self.movement = True
+            self.collision_with_wall = False
         elif key == arcade.key.RIGHT:
-            self.movement = True
+            #self.movement = True
+            self.collision_with_wall = False
+
 
 
 def main():

@@ -73,7 +73,7 @@ class MyGame(arcade.Window):
         self.wall_list = arcade.SpriteList()
         self.gem_list = arcade.SpriteList()
 
-        # Set up the player
+        # Set up the player/ sprite from https://www.kenney.nl/
         self.player_sprite = arcade.Sprite("platformChar_walk1.png",
                                            scale=0.5)
         self.player_sprite.center_x = 60
@@ -83,7 +83,7 @@ class MyGame(arcade.Window):
         self.score = 0
 
         """Outer walls"""
-        # Bottom wall
+        # Bottom wall / wall sprites from https://www.kenney.nl/
         for x in range(0, 1000, 32):
             wall = arcade.Sprite("platformPack_tile004.png", SPRITE_SCALING)
             wall.center_x = x

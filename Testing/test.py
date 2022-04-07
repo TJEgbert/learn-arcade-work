@@ -17,6 +17,8 @@ MARGIN = 5
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 750
 
+TILE_SCALING = 1
+
 class Player(arcade.Sprite):
 
     def update(self):
@@ -60,64 +62,37 @@ class MyGame(arcade.Window):
 
         self.block_list = None
 
+        self.tile_map = None
+
     def setup(self):
 
         self.movement_block_list = arcade.SpriteList()
         self.movement_block = Player("tile_0024.png", scale=3)
 
-        block = arcade.Sprite("platformPack_tile016.png", scale=1)
-        block.center_x = 300
-        block.center_y = 300
-        block.boundary_left = 0
-        block.boundary_top = 0
+        self.wall_list = arcade.SpriteList()
 
-        self.movement_block.center_x = 400
-        self.movement_block.center_y = 250
-        self.movement_block_list.append(self.movement_block)
-
+        self.block_list = arcade.SpriteList()
+        self.block = Block("platformPack_tile016.png")
         self.block.center_x = 300
         self.block.center_y = 300
         self.block_list.append(self.block)
 
 
-        self.wall_list = arcade.SpriteList()
         self.test_list = arcade.SpriteList()
         self.movement = False
 
-        for x in range(0, 1080, 54):
-            wall = arcade.Sprite("tile_0018.png", scale=3)
-            wall.center_x = x
-            wall.center_y = 800
-            self.wall_list.append(wall)
+        map_name = "wall_map.json"
 
-        for x in range(0, 1080, 54):
-            wall = arcade.Sprite("tile_0018.png", scale=3)
-            wall.center_x = x
-            wall.center_y = 30
-            self.wall_list.append(wall)
+        self.tile_map = arcade.load_tilemap(map_name, scaling=TILE_SCALING)
 
-        for y in range(0, 1080, 54):
-            wall = arcade.Sprite("tile_0018.png", scale=3)
-            wall.center_x = 50
-            wall.center_y = y
-            self.wall_list.append(wall)
+        self.wall_list = self.tile_map.sprite_lists["Walls"]
 
-        for y in range(0, 1080, 54):
-            wall = arcade.Sprite("tile_0018.png", scale=3)
-            wall.center_x = 950
-            wall.center_y = y
-            self.wall_list.append(wall)
-
-        for y in range(0, 1080, 54):
-            test = arcade.Sprite("platformPack_tile016.png", scale=1)
-            test.center_x = 950
-            test.center_y = y
-            self.test_list.append(test)
+        if self.tile_map.background_color:
+            arcade.set_background_color(self.tile_map.background_color)
 
         self.physics_engine = arcade.PhysicsEnginePlatformer(player_sprite=self.movement_block,
-                                                             platforms=self.block_list,
-                                                             walls=self.wall_list,
-                                                             gravity_constant=0)
+                                                             gravity_constant= 0,
+                                                             walls= self.wall_list)
 
     def on_draw(self):
         arcade.start_render()
@@ -133,14 +108,15 @@ class MyGame(arcade.Window):
 
         self.movement_block_list.update()
 
-        self.wall_list.update()
+        #self.wall_list.update()
 
         self.physics_engine.update()
 
-        test_hit_list = arcade.check_for_collision(self.movement_block, self.block)
+        test_hit_list = arcade.check_for_collision_with_list(self.movement_block, self.block_list)
 
         if test_hit_list:
-            self.
+            self.block.center_y += MOVEMENT_SPEED
+            print("hit")
 
     def update_player_speed(self):
 

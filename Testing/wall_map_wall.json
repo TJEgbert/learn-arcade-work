@@ -25,16 +25,82 @@
             60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60],
          "height":20,
          "id":1,
-         "name":"Tile Layer 1",
+         "name":"Wall",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
          "width":30,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":3,
+         "name":"moving_sprite",
+         "objects":[
+                {
+                 "gid":87,
+                 "height":64,
+                 "id":23,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":342,
+                 "y":721
+                }, 
+                {
+                 "gid":72,
+                 "height":64,
+                 "id":24,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"bottom_boundary",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
+                         "name":"change_x",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"change_y",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"left_boundary",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
+                         "name":"right_boundary",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
+                         "name":"top_boundary",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":242,
+                 "y":1095
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":2,
- "nextobjectid":1,
+ "nextlayerid":4,
+ "nextobjectid":25,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.8.4",
@@ -42,7 +108,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"platformPack_tilesheet.json"
+         "source":"..\/Lab 12 - Final Lab\/platformPack_tilesheet.json"
         }],
  "tilewidth":64,
  "type":"map",

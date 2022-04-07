@@ -14,10 +14,12 @@ HEIGHT = 54
 
 MARGIN = 5
 
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 750
+SCREEN_WIDTH = 1500
+SCREEN_HEIGHT = 1000
 
 TILE_SCALING = 1
+
+from typing import Optional
 
 class Player(arcade.Sprite):
 
@@ -64,35 +66,37 @@ class MyGame(arcade.Window):
 
         self.tile_map = None
 
+        self.moving_sprites_list: Optional[arcade.SpriteList] = None
+
     def setup(self):
 
         self.movement_block_list = arcade.SpriteList()
         self.movement_block = Player("tile_0024.png", scale=3)
+        self.movement_block.center_x = 200
+        self.movement_block.center_y = 200
+        self.movement_block_list.append(self.movement_block)
 
         self.wall_list = arcade.SpriteList()
 
-        self.block_list = arcade.SpriteList()
-        self.block = Block("platformPack_tile016.png")
-        self.block.center_x = 300
-        self.block.center_y = 300
-        self.block_list.append(self.block)
-
-
         self.test_list = arcade.SpriteList()
+
         self.movement = False
 
-        map_name = "wall_map.json"
+        map_name = "wall_map_wall.json"
 
         self.tile_map = arcade.load_tilemap(map_name, scaling=TILE_SCALING)
 
-        self.wall_list = self.tile_map.sprite_lists["Walls"]
+        self.moving_sprites_list = self.tile_map.sprite_lists['moving_sprite']
+
+        self.wall_list = self.tile_map.sprite_lists["Wall"]
 
         if self.tile_map.background_color:
             arcade.set_background_color(self.tile_map.background_color)
 
         self.physics_engine = arcade.PhysicsEnginePlatformer(player_sprite=self.movement_block,
-                                                             gravity_constant= 0,
-                                                             walls= self.wall_list)
+                                                             gravity_constant=0,
+                                                             walls=self.wall_list,
+                                                             platforms=self.moving_sprites_list)
 
     def on_draw(self):
         arcade.start_render()
@@ -102,7 +106,7 @@ class MyGame(arcade.Window):
 
         self.test_list.draw()
 
-        self.block_list.draw()
+        self.moving_sprites_list.draw()
 
     def on_update(self, delta_time):
 
@@ -112,11 +116,12 @@ class MyGame(arcade.Window):
 
         self.physics_engine.update()
 
-        test_hit_list = arcade.check_for_collision_with_list(self.movement_block, self.block_list)
+        hit_list = arcade.check_for_collision_with_list(self.movement_block, self.moving_sprites_list)
+        for moving_sprite in self.moving_sprites_list:
+            if hit_list and moving_sprite.boundary_left:
+                moving_sprite.change_x -= MOVEMENT_SPEED
+                print("hit")
 
-        if test_hit_list:
-            self.block.center_y += MOVEMENT_SPEED
-            print("hit")
 
     def update_player_speed(self):
 

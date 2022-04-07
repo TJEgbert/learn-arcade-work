@@ -15,9 +15,16 @@ HEIGHT = 54
 MARGIN = 5
 
 SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 800
+SCREEN_HEIGHT = 750
 
 class Player(arcade.Sprite):
+
+    def update(self):
+
+        self.center_x += self.change_x
+        self.center_y += self.change_y
+
+class Block(arcade.Sprite):
 
     def update(self):
 
@@ -35,6 +42,8 @@ class MyGame(arcade.Window):
 
         self.movement_block = None
 
+        self.block = None
+
         self.movement_block_list = None
         self.wall_list = None
         self.test_list = None
@@ -44,14 +53,32 @@ class MyGame(arcade.Window):
         self.physics_engine = None
         self.key_pressed = False
 
+        self.left_pressed = False
+        self.right_pressed = False
+        self.down_pressed = False
+        self.up_pressed = False
+
+        self.block_list = None
+
     def setup(self):
 
         self.movement_block_list = arcade.SpriteList()
         self.movement_block = Player("tile_0024.png", scale=3)
 
+        block = arcade.Sprite("platformPack_tile016.png", scale=1)
+        block.center_x = 300
+        block.center_y = 300
+        block.boundary_left = 0
+        block.boundary_top = 0
+
         self.movement_block.center_x = 400
         self.movement_block.center_y = 250
         self.movement_block_list.append(self.movement_block)
+
+        self.block.center_x = 300
+        self.block.center_y = 300
+        self.block_list.append(self.block)
+
 
         self.wall_list = arcade.SpriteList()
         self.test_list = arcade.SpriteList()
@@ -87,25 +114,10 @@ class MyGame(arcade.Window):
             test.center_y = y
             self.test_list.append(test)
 
-        for y in range(0, 1080, 54):
-            test = arcade.Sprite("platformPack_tile016.png", scale=1)
-            test.center_x = 50
-            test.center_y = y
-            self.test_list.append(test)
-
-        for x in range(0, 1080, 400):
-            test = arcade.Sprite("platformPack_tile016.png", scale=1)
-            test.center_x = x
-            test.center_y = 400
-            self.test_list.append(test)
-
-        for x in range(0, 1080, 400):
-            wall = arcade.Sprite("tile_0018.png", scale=1)
-            wall.center_x = x
-            wall.center_y = 400
-            self.wall_list.append(wall)
-
-        self.physics_engine = arcade.PhysicsEngineSimple(self.movement_block, self.wall_list)
+        self.physics_engine = arcade.PhysicsEnginePlatformer(player_sprite=self.movement_block,
+                                                             platforms=self.block_list,
+                                                             walls=self.wall_list,
+                                                             gravity_constant=0)
 
     def on_draw(self):
         arcade.start_render()
@@ -115,6 +127,8 @@ class MyGame(arcade.Window):
 
         self.test_list.draw()
 
+        self.block_list.draw()
+
     def on_update(self, delta_time):
 
         self.movement_block_list.update()
@@ -123,47 +137,54 @@ class MyGame(arcade.Window):
 
         self.physics_engine.update()
 
-        test_hit_list = arcade.check_for_collision_with_list(self.movement_block, self.test_list)
+        test_hit_list = arcade.check_for_collision(self.movement_block, self.block)
 
         if test_hit_list:
-            if self.movement_block.change_x or self.movement_block.change_y == 0:
-                if not self.collision_with_wall:
-                    self.collision_with_wall = True
-                    #self.movement = False
-                    self.key_pressed = False
-                    print(MOVEMENT_SPEED)
+            self.
+
+    def update_player_speed(self):
+
+        self.movement_block.change_x = 0
+        self.movement_block.change_y = 0
+
+        if self.up_pressed and not self.down_pressed:
+            self.movement_block.change_y = MOVEMENT_SPEED
+        elif self.down_pressed and not self.up_pressed:
+            self.movement_block.change_y = - MOVEMENT_SPEED
+        elif self.right_pressed and not self.left_pressed:
+            self.movement_block.change_x = MOVEMENT_SPEED
+        elif self.left_pressed and not self.right_pressed:
+            self.movement_block.change_x = - MOVEMENT_SPEED
 
     def on_key_press(self, key, modifiers):
 
-        if not self.key_pressed:
-
-            if key == arcade.key.UP:
-                self.movement_block.change_y = MOVEMENT_SPEED
-                self.key_pressed = True
-            elif key == arcade.key.DOWN:
-                self.movement_block.change_y = - MOVEMENT_SPEED
-                self.key_pressed = True
-            elif key == arcade.key.RIGHT:
-                self.movement_block.change_x = MOVEMENT_SPEED
-                self.key_pressed = True
-            elif key == arcade.key.LEFT:
-                self.movement_block.change_x = - MOVEMENT_SPEED
-                self.key_pressed = True
+        if key == arcade.key.UP:
+            self.up_pressed = True
+            self.update_player_speed()
+        elif key == arcade.key.DOWN:
+            self.down_pressed = True
+            self.update_player_speed()
+        elif key == arcade.key.RIGHT:
+            self.right_pressed = True
+            self.update_player_speed()
+        elif key == arcade.key.LEFT:
+            self.left_pressed = True
+            self.update_player_speed()
 
     def on_key_release(self, key, modifiers):
 
         if key == arcade.key.UP:
-            #self.movement = True
-            self.collision_with_wall = False
+            self.up_pressed = False
+            self.update_player_speed()
         elif key == arcade.key.DOWN:
-            #self.movement = True
-            self.collision_with_wall = False
+            self.down_pressed = False
+            self.update_player_speed()
         elif key == arcade.key.LEFT:
-            #self.movement = True
-            self.collision_with_wall = False
+            self.left_pressed = False
+            self.update_player_speed()
         elif key == arcade.key.RIGHT:
-            #self.movement = True
-            self.collision_with_wall = False
+            self.right_pressed = False
+            self.update_player_speed()
 
 
 def main():

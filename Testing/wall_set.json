@@ -1,0 +1,25 @@
+{ "columns":2,
+ "grid":
+    {
+     "height":65,
+     "orientation":"orthogonal",
+     "width":65
+    },
+ "image":"..\/..\/final_assits_pack\/Tilemap\/marble.png",
+ "imageheight":170,
+ "imagewidth":170,
+ "margin":0,
+ "name":"wall_set",
+ "spacing":0,
+ "tilecount":4,
+ "tiledversion":"1.8.4",
+ "tileheight":69,
+ "tileoffset":
+    {
+     "x":5,
+     "y":5
+    },
+ "tilewidth":69,
+ "type":"tileset",
+ "version":"1.8"
+}

@@ -4,22 +4,18 @@ import arcade
 
 # --- Constants ---
 
-MOVEMENT_SPEED = 5
+MOVEMENT_SPEED = 7
 
 ROW_COUNT = 15
 COLUMN_COUNT = 15
 
-WIDTH = 54
-HEIGHT = 54
+WIDTH = 1050
+HEIGHT = 1050
 
 MARGIN = 5
 
-SCREEN_WIDTH = 1500
-SCREEN_HEIGHT = 1000
+LIVES = 3
 
-TILE_SCALING = 1
-
-from typing import Optional
 
 class Player(arcade.Sprite):
 
@@ -28,150 +24,240 @@ class Player(arcade.Sprite):
         self.center_x += self.change_x
         self.center_y += self.change_y
 
-class Block(arcade.Sprite):
 
-    def update(self):
+class MenuView(arcade.View):
 
-        self.center_x += self.change_x
-        self.center_y += self.change_y
+    def __init__(self):
+        super().__init__()
+
+    def on_show(self):
+        arcade.set_background_color(arcade.color.WHITE)
+
+    def on_draw(self):
+        arcade.set_background_color(arcade.color.WHITE)
+        arcade.draw_text("Menu Screen", WIDTH / 2, HEIGHT / 2, arcade.color.BLACK, font_size=50, anchor_x="center")
+        arcade.draw_text("Press enter to start", WIDTH / 2, HEIGHT / 2 - 75, arcade.color.BLACK, font_size=20,
+                         anchor_x="center")
+
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ENTER:
+            game_view = GameView()
+            game_view.setup()
+            self.window.show_view(game_view)
 
 
-class MyGame(arcade.Window):
+class GameView(arcade.View):
     """ Our custom Window Class"""
 
     def __init__(self):
         """ Initializer """
         # Call the parent class initializer
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "Sprite Example")
+        super().__init__()
 
         self.movement_block = None
-
-        self.block = None
+        self.wall = None
+        self.test = None
+        self.goal = None
 
         self.movement_block_list = None
         self.wall_list = None
         self.test_list = None
+        self.death_list = None
+        self.goal_list = None
 
         self.movement = False
         self.collision_with_wall = False
         self.physics_engine = None
         self.key_pressed = False
-
-        self.left_pressed = False
-        self.right_pressed = False
-        self.down_pressed = False
-        self.up_pressed = False
-
-        self.block_list = None
-
-        self.tile_map = None
-
-        self.moving_sprites_list: Optional[arcade.SpriteList] = None
+        self.lives = None
 
     def setup(self):
 
+        self.lives = LIVES
         self.movement_block_list = arcade.SpriteList()
         self.movement_block = Player("tile_0024.png", scale=3)
-        self.movement_block.center_x = 200
-        self.movement_block.center_y = 200
+
+        self.movement_block.center_x = 400
+        self.movement_block.center_y = 250
         self.movement_block_list.append(self.movement_block)
 
+        self.death_list = arcade.SpriteList()
         self.wall_list = arcade.SpriteList()
-
         self.test_list = arcade.SpriteList()
-
+        self.goal_list = arcade.SpriteList()
         self.movement = False
 
-        map_name = "wall_map_wall.json"
+        wall_points = [(800, 250), (750, 800), (150, 740), (204, 500)]
 
-        self.tile_map = arcade.load_tilemap(map_name, scaling=TILE_SCALING)
+        for location in wall_points:
 
-        self.moving_sprites_list = self.tile_map.sprite_lists['moving_sprite']
+        self.test = arcade.Sprite("iceBlock.png", scale=1)
+        self.test.center_x = 800
+        self.test.center_y = 250
+        self.test_list.append(self.test)
 
-        self.wall_list = self.tile_map.sprite_lists["Wall"]
+        self.test = arcade.Sprite("iceBlock.png")
+        self.test.center_x = 750
+        self.test.center_y = 800
+        self.test_list.append(self.test)
 
-        if self.tile_map.background_color:
-            arcade.set_background_color(self.tile_map.background_color)
+        self.wall = arcade.Sprite("tile_0018.png", scale=.9)
+        self.wall.center_x = 800
+        self.wall.center_y = 250
+        self.wall_list.append(self.wall)
 
-        self.physics_engine = arcade.PhysicsEnginePlatformer(player_sprite=self.movement_block,
-                                                             gravity_constant=0,
-                                                             walls=self.wall_list,
-                                                             platforms=self.moving_sprites_list)
+        self.wall = arcade.Sprite("tile_0018.png")
+        self.wall.center_x = 750
+        self.wall.center_y = 800
+        self.wall_list.append(self.wall)
+
+        self.test = arcade.Sprite("iceBlock.png")
+        self.test.center_x = 150
+        self.test.center_y = 740
+        self.test_list.append(self.test)
+
+        self.wall = arcade.Sprite("tile_0018.png")
+        self.wall.center_x = 150
+        self.wall.center_y = 740
+        self.wall_list.append(self.wall)
+
+        self.test = arcade.Sprite("iceBlock.png")
+        self.test.center_x = 204
+        self.test.center_y = 500
+        self.test_list.append(self.test)
+
+        self.wall = arcade.Sprite("tile_0018.png")
+        self.wall.center_x = 204
+        self.wall.center_y = 500
+        self.wall_list.append(self.wall)
+
+        self.goal = arcade.Sprite("tile_0024.png")
+        self.goal.center_x = 900
+        self.goal.center_y = 558
+        self.goal_list.append(self.goal)
+
+
+        for x in range(0, 1080, 54):
+            death = arcade.Sprite("iceBlock.png", scale=1)
+            death.center_x = x
+            death.center_y = 1023
+            self.death_list.append(death)
+
+        for x in range(0, 1080, 54):
+            death = arcade.Sprite("iceBlock.png", scale=1)
+            death.center_x = x
+            death.center_y = 50
+            self.death_list.append(death)
+
+        for y in range(0, 1080, 54):
+            death = arcade.Sprite("iceBlock.png", scale=1)
+            death.center_x = 27
+            death.center_y = y
+            self.death_list.append(death)
+
+        for y in range(0, 1080, 54):
+            death = arcade.Sprite("iceBlock.png", scale=1)
+            death.center_x = 1023
+            death.center_y = y
+            self.death_list.append(death)
+
+
+        self.physics_engine = arcade.PhysicsEngineSimple(self.movement_block, self.wall_list)
+
+    def on_show(self):
+
+        arcade.set_background_color(arcade.color.BLACK)
 
     def on_draw(self):
+
         arcade.start_render()
+
         self.movement_block_list.draw()
-
         self.wall_list.draw()
-
         self.test_list.draw()
+        self.death_list.draw()
+        output = f"lives:{self.lives}"
+        arcade.draw_text(output, 50, 50, arcade.color.BLACK, 12,)
+        self.goal_list.draw()
 
-        self.moving_sprites_list.draw()
 
     def on_update(self, delta_time):
 
         self.movement_block_list.update()
 
-        #self.wall_list.update()
+        self.wall_list.update()
 
         self.physics_engine.update()
 
-        hit_list = arcade.check_for_collision_with_list(self.movement_block, self.moving_sprites_list)
-        for moving_sprite in self.moving_sprites_list:
-            if hit_list and moving_sprite.boundary_left:
-                moving_sprite.change_x -= MOVEMENT_SPEED
-                print("hit")
 
+        test_hit_list = arcade.check_for_collision_with_list(self.movement_block, self.test_list)
+        death_hit = arcade.check_for_collision_with_list(self.movement_block, self.death_list)
+        goal_hit = arcade.check_for_collision_with_list(self.movement_block, self.goal_list)
 
-    def update_player_speed(self):
+        if death_hit:
+            self.movement_block.center_y = 250
+            self.movement_block.center_x = 400
+            self.movement_block.change_x = 0
+            self.movement_block.change_y = 0
+            self.key_pressed = False
+            self.collision_with_wall = True
+            self.lives -= 1
+            print("life lost")
 
-        self.movement_block.change_x = 0
-        self.movement_block.change_y = 0
+        if test_hit_list:
+            if not self.collision_with_wall:
+                self.collision_with_wall = True
+                #self.movement = False
+                self.key_pressed = False
+                self.movement_block.change_y = 0
+                self.movement_block.change_x = 0
+                print(MOVEMENT_SPEED)
 
-        if self.up_pressed and not self.down_pressed:
-            self.movement_block.change_y = MOVEMENT_SPEED
-        elif self.down_pressed and not self.up_pressed:
-            self.movement_block.change_y = - MOVEMENT_SPEED
-        elif self.right_pressed and not self.left_pressed:
-            self.movement_block.change_x = MOVEMENT_SPEED
-        elif self.left_pressed and not self.right_pressed:
-            self.movement_block.change_x = - MOVEMENT_SPEED
+        if goal_hit:
+            print("win!")
 
+        if self.lives == 0:
+            print("game over")
+
+        #print(self.movement_block.center_x, self.movement_block.center_y)
     def on_key_press(self, key, modifiers):
 
-        if key == arcade.key.UP:
-            self.up_pressed = True
-            self.update_player_speed()
-        elif key == arcade.key.DOWN:
-            self.down_pressed = True
-            self.update_player_speed()
-        elif key == arcade.key.RIGHT:
-            self.right_pressed = True
-            self.update_player_speed()
-        elif key == arcade.key.LEFT:
-            self.left_pressed = True
-            self.update_player_speed()
+        if not self.key_pressed:
+
+            if key == arcade.key.UP:
+                self.movement_block.change_y = MOVEMENT_SPEED
+                self.key_pressed = True
+            elif key == arcade.key.DOWN:
+                self.movement_block.change_y = - MOVEMENT_SPEED
+                self.key_pressed = True
+            elif key == arcade.key.RIGHT:
+                self.movement_block.change_x = MOVEMENT_SPEED
+                self.key_pressed = True
+            elif key == arcade.key.LEFT:
+                self.movement_block.change_x = - MOVEMENT_SPEED
+                self.key_pressed = True
 
     def on_key_release(self, key, modifiers):
 
         if key == arcade.key.UP:
-            self.up_pressed = False
-            self.update_player_speed()
+            #self.movement = True
+            self.collision_with_wall = False
         elif key == arcade.key.DOWN:
-            self.down_pressed = False
-            self.update_player_speed()
+            #self.movement = True
+            self.collision_with_wall = False
         elif key == arcade.key.LEFT:
-            self.left_pressed = False
-            self.update_player_speed()
+            #self.movement = True
+            self.collision_with_wall = False
         elif key == arcade.key.RIGHT:
-            self.right_pressed = False
-            self.update_player_speed()
+            #self.movement = True
+            self.collision_with_wall = False
 
 
 def main():
     """ Main method """
-    window = MyGame()
-    window.setup()
+    window = arcade.Window(WIDTH, HEIGHT, "HEy")
+    menu_view = MenuView()
+    window.show_view(menu_view)
     arcade.run()
 
 

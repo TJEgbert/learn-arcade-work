@@ -100,7 +100,7 @@ class MyGame(arcade.Window):
             self.test_list.append(test)
 
         for x in range(0, 1080, 400):
-            wall = arcade.Sprite("tile_0018.png", scale=1)
+            wall = arcade.Sprite("tile_0018.png", scale=3)
             wall.center_x = x
             wall.center_y = 400
             self.wall_list.append(wall)
@@ -131,6 +131,8 @@ class MyGame(arcade.Window):
                     self.collision_with_wall = True
                     #self.movement = False
                     self.key_pressed = False
+                    self.movement_block.change_y = 0
+                    self.movement_block.change_x = 0
                     print(MOVEMENT_SPEED)
 
     def on_key_press(self, key, modifiers):

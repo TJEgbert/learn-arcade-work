@@ -16,6 +16,9 @@ MARGIN = 5
 
 LIVES = 3
 
+LEVEL_1_X = 400
+LEVEL_1_Y = 250
+
 
 class Player(arcade.Sprite):
 
@@ -31,12 +34,15 @@ class MenuView(arcade.View):
         super().__init__()
 
     def on_show(self):
-        arcade.set_background_color(arcade.color.WHITE)
+
+        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
 
     def on_draw(self):
-        arcade.set_background_color(arcade.color.WHITE)
-        arcade.draw_text("Menu Screen", WIDTH / 2, HEIGHT / 2, arcade.color.BLACK, font_size=50, anchor_x="center")
-        arcade.draw_text("Press enter to start", WIDTH / 2, HEIGHT / 2 - 75, arcade.color.BLACK, font_size=20,
+        self.window.clear()
+        arcade.draw_rectangle_filled(center_x=500, center_y=500, width=250, height=250,color=arcade.color.DARK_SLATE_BLUE)
+        arcade.set_background_color(arcade.color.BLUEBERRY)
+        arcade.draw_text("Menu Screen", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        arcade.draw_text("Press enter to start", WIDTH / 2, HEIGHT / 2 - 75, arcade.color.WHITE, font_size=20,
                          anchor_x="center")
 
     def on_key_press(self, key, modifiers):
@@ -77,8 +83,8 @@ class GameView(arcade.View):
         self.movement_block_list = arcade.SpriteList()
         self.movement_block = Player("tile_0024.png", scale=3)
 
-        self.movement_block.center_x = 400
-        self.movement_block.center_y = 250
+        self.movement_block.center_x = LEVEL_1_X
+        self.movement_block.center_y = LEVEL_1_Y
         self.movement_block_list.append(self.movement_block)
 
         self.death_list = arcade.SpriteList()
@@ -89,53 +95,22 @@ class GameView(arcade.View):
 
         wall_points = [(800, 250), (750, 800), (150, 740), (204, 500)]
 
-        for location in wall_points:
+        for x, y in wall_points:
+            self.test = arcade.Sprite("iceBlock.png")
+            self.test.center_x = x
+            self.test.center_y = y
+            self.test_list.append(self.test)
 
-        self.test = arcade.Sprite("iceBlock.png", scale=1)
-        self.test.center_x = 800
-        self.test.center_y = 250
-        self.test_list.append(self.test)
-
-        self.test = arcade.Sprite("iceBlock.png")
-        self.test.center_x = 750
-        self.test.center_y = 800
-        self.test_list.append(self.test)
-
-        self.wall = arcade.Sprite("tile_0018.png", scale=.9)
-        self.wall.center_x = 800
-        self.wall.center_y = 250
-        self.wall_list.append(self.wall)
-
-        self.wall = arcade.Sprite("tile_0018.png")
-        self.wall.center_x = 750
-        self.wall.center_y = 800
-        self.wall_list.append(self.wall)
-
-        self.test = arcade.Sprite("iceBlock.png")
-        self.test.center_x = 150
-        self.test.center_y = 740
-        self.test_list.append(self.test)
-
-        self.wall = arcade.Sprite("tile_0018.png")
-        self.wall.center_x = 150
-        self.wall.center_y = 740
-        self.wall_list.append(self.wall)
-
-        self.test = arcade.Sprite("iceBlock.png")
-        self.test.center_x = 204
-        self.test.center_y = 500
-        self.test_list.append(self.test)
-
-        self.wall = arcade.Sprite("tile_0018.png")
-        self.wall.center_x = 204
-        self.wall.center_y = 500
-        self.wall_list.append(self.wall)
+        for x, y in wall_points:
+            self.wall = arcade.Sprite("tile_0018.png", scale=.9)
+            self.wall.center_x = x
+            self.wall.center_y = y
+            self.wall_list.append(self.wall)
 
         self.goal = arcade.Sprite("tile_0024.png")
         self.goal.center_x = 900
         self.goal.center_y = 558
         self.goal_list.append(self.goal)
-
 
         for x in range(0, 1080, 54):
             death = arcade.Sprite("iceBlock.png", scale=1)
@@ -161,12 +136,11 @@ class GameView(arcade.View):
             death.center_y = y
             self.death_list.append(death)
 
-
         self.physics_engine = arcade.PhysicsEngineSimple(self.movement_block, self.wall_list)
 
     def on_show(self):
 
-        arcade.set_background_color(arcade.color.BLACK)
+        arcade.set_background_color(arcade.color.BLUEBERRY)
 
     def on_draw(self):
 
@@ -180,7 +154,6 @@ class GameView(arcade.View):
         arcade.draw_text(output, 50, 50, arcade.color.BLACK, 12,)
         self.goal_list.draw()
 
-
     def on_update(self, delta_time):
 
         self.movement_block_list.update()
@@ -188,7 +161,6 @@ class GameView(arcade.View):
         self.wall_list.update()
 
         self.physics_engine.update()
-
 
         test_hit_list = arcade.check_for_collision_with_list(self.movement_block, self.test_list)
         death_hit = arcade.check_for_collision_with_list(self.movement_block, self.death_list)
@@ -202,7 +174,6 @@ class GameView(arcade.View):
             self.key_pressed = False
             self.collision_with_wall = True
             self.lives -= 1
-            print("life lost")
 
         if test_hit_list:
             if not self.collision_with_wall:
@@ -215,9 +186,15 @@ class GameView(arcade.View):
 
         if goal_hit:
             print("win!")
+            game_view = Level2()
+            game_view.setup()
+            self.window.show_view(game_view)
 
         if self.lives == 0:
             print("game over")
+            game_view = Level2()
+            game_view.setup()
+            self.window.show_view(game_view)
 
         #print(self.movement_block.center_x, self.movement_block.center_y)
     def on_key_press(self, key, modifiers):
@@ -236,6 +213,9 @@ class GameView(arcade.View):
             elif key == arcade.key.LEFT:
                 self.movement_block.change_x = - MOVEMENT_SPEED
                 self.key_pressed = True
+            elif key == arcade.key.R:
+                self.movement_block.center_x = LEVEL_1_X
+                self.movement_block.center_y = LEVEL_1_Y
 
     def on_key_release(self, key, modifiers):
 
@@ -252,6 +232,32 @@ class GameView(arcade.View):
             #self.movement = True
             self.collision_with_wall = False
 
+
+class Level2(arcade.View):
+
+    def __init__(self):
+        super().__init__()
+
+    def on_show(self):
+        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+
+    def on_draw(self):
+        self.window.clear()
+        arcade.draw_rectangle_filled(center_x=500, center_y=500, width=250, height=250,color=arcade.color.DARK_SLATE_BLUE)
+        arcade.set_background_color(arcade.color.BLUEBERRY)
+        arcade.draw_text("Menu Screen", WIDTH / 2, HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        arcade.draw_text("Press enter to start", WIDTH / 2, HEIGHT / 2 - 75, arcade.color.WHITE, font_size=20,
+                         anchor_x="center")
+
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ENTER:
+            game_view = GameView()
+            game_view.setup()
+            self.window.show_view(game_view)
+
+    def setup(self):
+
+        self.window.clear()
 
 def main():
     """ Main method """

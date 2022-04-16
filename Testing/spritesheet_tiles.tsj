@@ -1,0 +1,14 @@
+{ "columns":16,
+ "image":"..\/..\/lava\/Spritesheets\/spritesheet_tiles.png",
+ "imageheight":1280,
+ "imagewidth":1152,
+ "margin":0,
+ "name":"spritesheet_tiles",
+ "spacing":0,
+ "tilecount":288,
+ "tiledversion":"1.8.4",
+ "tileheight":70,
+ "tilewidth":70,
+ "type":"tileset",
+ "version":"1.8"
+}

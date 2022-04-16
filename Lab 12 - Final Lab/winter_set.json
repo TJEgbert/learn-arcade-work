@@ -1,0 +1,14 @@
+{ "columns":14,
+ "image":"..\/..\/final_assits_pack\/snow\/sheet.png",
+ "imageheight":490,
+ "imagewidth":980,
+ "margin":0,
+ "name":"winter_set",
+ "spacing":0,
+ "tilecount":98,
+ "tiledversion":"1.8.4",
+ "tileheight":70,
+ "tilewidth":70,
+ "type":"tileset",
+ "version":"1.8"
+}

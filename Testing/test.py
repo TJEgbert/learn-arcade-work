@@ -238,6 +238,15 @@ class Level2(arcade.View):
     def __init__(self):
         super().__init__()
 
+        self.goal_list = None
+        self.reset_list = None
+        self.tile_map = None
+
+    def setup(self):
+        self.goal_list = arcade.SpriteList()
+        self.reset_list = arcade.SpriteList()
+
+
     def on_show(self):
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
 

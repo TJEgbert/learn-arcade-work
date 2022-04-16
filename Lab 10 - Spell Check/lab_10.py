@@ -1,166 +1,250 @@
-import random
+"""
+Sprite move between different rooms.
+
+Artwork from https://kenney.nl
+
+If Python and Arcade are installed, this example can be run from the command line with:
+python -m arcade.examples.sprite_rooms
+"""
+
 import arcade
+import os
 
-# --- Constants ---
-SPRITE_SCALING_PLAYER = 0.5
-SPRITE_SCALING_COIN = .25
-COIN_COUNT = 50
+SPRITE_SCALING = 0.5
+SPRITE_NATIVE_SIZE = 128
+SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Implement Views Example"
+SCREEN_WIDTH = SPRITE_SIZE * 14
+SCREEN_HEIGHT = SPRITE_SIZE * 10
+SCREEN_TITLE = "Sprite Rooms Example"
 
-
-class InstructionView(arcade.View):
-    """ View to show instructions """
-
-    def on_show(self):
-        """ This is run once when we switch to this view """
-        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
-
-        # Reset the viewport, necessary if we have a scrolling game and we need
-        # to reset the viewport back to the start so we can see what we draw.
-        arcade.set_viewport(0, self.window.width, 0, self.window.height)
-
-    def on_draw(self):
-        """ Draw this view """
-        self.clear()
-        arcade.draw_text("Instructions Screen", self.window.width / 2, self.window.height / 2,
-                         arcade.color.WHITE, font_size=50, anchor_x="center")
-        arcade.draw_text("Click to advance", self.window.width / 2, self.window.height / 2-75,
-                         arcade.color.WHITE, font_size=20, anchor_x="center")
-
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        """ If the user presses the mouse button, start the game. """
-        game_view = GameView()
-        game_view.setup()
-        self.window.show_view(game_view)
+MOVEMENT_SPEED = 5
 
 
-class GameOverView(arcade.View):
-    """ View to show when game is over """
-
+class Room:
+    """
+    This class holds all the information about the
+    different rooms.
+    """
     def __init__(self):
-        """ This is run once when we switch to this view """
-        super().__init__()
-        self.texture = arcade.load_texture("game_over.png")
+        # You may want many lists. Lists for coins, monsters, etc.
+        self.wall_list = None
 
-        # Reset the viewport, necessary if we have a scrolling game and we need
-        # to reset the viewport back to the start so we can see what we draw.
-        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
-
-    def on_draw(self):
-        """ Draw this view """
-        self.clear()
-        self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
-                                SCREEN_WIDTH, SCREEN_HEIGHT)
-
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        """ If the user presses the mouse button, re-start the game. """
-        game_view = GameView()
-        game_view.setup()
-        self.window.show_view(game_view)
+        # This holds the background images. If you don't want changing
+        # background images, you can delete this part.
+        self.background = None
 
 
-class GameView(arcade.View):
-    """ Our custom Window Class"""
+def setup_room_1():
+    """
+    Create and return room 1.
+    If your program gets large, you may want to separate this into different
+    files.
+    """
+    room = Room()
 
-    def __init__(self):
-        """ Initializer """
-        # Call the parent class initializer
-        super().__init__()
+    """ Set up the game and initialize the variables. """
+    # Sprite lists
+    room.wall_list = arcade.SpriteList()
 
-        # Variables that will hold sprite lists
-        self.player_list = None
-        self.coin_list = None
+    # -- Set up the walls
+    # Create bottom and top row of boxes
+    # This y loops a list of two, the coordinate 0, and just under the top of window
+    for y in (0, SCREEN_HEIGHT - SPRITE_SIZE):
+        # Loop for each box going across
+        for x in range(0, SCREEN_WIDTH, SPRITE_SIZE):
+            wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png",
+                                 SPRITE_SCALING)
+            wall.left = x
+            wall.bottom = y
+            room.wall_list.append(wall)
 
-        # Set up the player info
+    # Create left and right column of boxes
+    for x in (0, SCREEN_WIDTH - SPRITE_SIZE):
+        # Loop for each box going across
+        for y in range(SPRITE_SIZE, SCREEN_HEIGHT - SPRITE_SIZE, SPRITE_SIZE):
+            # Skip making a block 4 and 5 blocks up on the right side
+            if (y != SPRITE_SIZE * 4 and y != SPRITE_SIZE * 5) or x == 0:
+                wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png",
+                                     SPRITE_SCALING)
+                wall.left = x
+                wall.bottom = y
+                room.wall_list.append(wall)
+
+    wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png",
+                         SPRITE_SCALING)
+    wall.left = 7 * SPRITE_SIZE
+    wall.bottom = 5 * SPRITE_SIZE
+    room.wall_list.append(wall)
+
+    # If you want coins or monsters in a level, then add that code here.
+
+    # Load the background image for this level.
+    room.background = arcade.load_texture(":resources:images/backgrounds/"
+                                          "abstract_1.jpg")
+
+    return room
+
+
+def setup_room_2():
+    """
+    Create and return room 2.
+    """
+    room = Room()
+
+    """ Set up the game and initialize the variables. """
+    # Sprite lists
+    room.wall_list = arcade.SpriteList()
+
+    # -- Set up the walls
+    # Create bottom and top row of boxes
+    # This y loops a list of two, the coordinate 0, and just under the top of window
+    for y in (0, SCREEN_HEIGHT - SPRITE_SIZE):
+        # Loop for each box going across
+        for x in range(0, SCREEN_WIDTH, SPRITE_SIZE):
+            wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+            wall.left = x
+            wall.bottom = y
+            room.wall_list.append(wall)
+
+    # Create left and right column of boxes
+    for x in (0, SCREEN_WIDTH - SPRITE_SIZE):
+        # Loop for each box going across
+        for y in range(SPRITE_SIZE, SCREEN_HEIGHT - SPRITE_SIZE, SPRITE_SIZE):
+            # Skip making a block 4 and 5 blocks up
+            if (y != SPRITE_SIZE * 4 and y != SPRITE_SIZE * 5) or x != 0:
+                wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+                wall.left = x
+                wall.bottom = y
+                room.wall_list.append(wall)
+
+    wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+    wall.left = 5 * SPRITE_SIZE
+    wall.bottom = 6 * SPRITE_SIZE
+    room.wall_list.append(wall)
+    room.background = arcade.load_texture(":resources:images/backgrounds/abstract_2.jpg")
+
+    return room
+
+
+class MyGame(arcade.Window):
+    """ Main application class. """
+
+    def __init__(self, width, height, title):
+        """
+        Initializer
+        """
+        super().__init__(width, height, title)
+
+        # Set the working directory (where we expect to find files) to the same
+        # directory this .py file is in. You can leave this out of your own
+        # code, but it is needed to easily run the examples using "python -m"
+        # as mentioned at the top of this program.
+        file_path = os.path.dirname(os.path.abspath(__file__))
+        os.chdir(file_path)
+
+        # Sprite lists
+        self.current_room = 0
+
+        # Set up the player
+        self.rooms = None
         self.player_sprite = None
-        self.score = 0
-
-        # Don't show the mouse cursor
-        self.window.set_mouse_visible(False)
-
-        arcade.set_background_color(arcade.color.AMAZON)
+        self.player_list = None
+        self.physics_engine = None
 
     def setup(self):
         """ Set up the game and initialize the variables. """
-
-        # Sprite lists
-        self.player_list = arcade.SpriteList()
-        self.coin_list = arcade.SpriteList()
-
-        # Score
-        self.score = 0
-
         # Set up the player
-        # Character image from kenney.nl
-        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png",
-                                           SPRITE_SCALING_PLAYER)
-        self.player_sprite.center_x = 50
-        self.player_sprite.center_y = 50
+        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/"
+                                           "femalePerson_idle.png", SPRITE_SCALING)
+        self.player_sprite.center_x = 100
+        self.player_sprite.center_y = 100
+        self.player_list = arcade.SpriteList()
         self.player_list.append(self.player_sprite)
 
-        # Create the coins
-        for i in range(COIN_COUNT):
+        # Our list of rooms
+        self.rooms = []
 
-            # Create the coin instance
-            # Coin image from kenney.nl
-            coin = arcade.Sprite(":resources:images/items/coinGold.png",
-                                 SPRITE_SCALING_COIN)
+        # Create the rooms. Extend the pattern for each room.
+        room = setup_room_1()
+        self.rooms.append(room)
 
-            # Position the coin
-            coin.center_x = random.randrange(SCREEN_WIDTH)
-            coin.center_y = random.randrange(SCREEN_HEIGHT)
+        room = setup_room_2()
+        self.rooms.append(room)
 
-            # Add the coin to the lists
-            self.coin_list.append(coin)
+        # Our starting room number
+        self.current_room = 0
+
+        # Create a physics engine for this room
+        self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
+                                                         self.rooms[self.current_room].wall_list)
 
     def on_draw(self):
-        """ Draw everything """
+        """
+        Render the screen.
+        """
+
+        # This command has to happen before we start drawing
         self.clear()
-        self.coin_list.draw()
+
+        # Draw the background texture
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                            SCREEN_WIDTH, SCREEN_HEIGHT,
+                                            self.rooms[self.current_room].background)
+
+        # Draw all the walls in this room
+        self.rooms[self.current_room].wall_list.draw()
+
+        # If you have coins or monsters, then copy and modify the line
+        # above for each list.
+
         self.player_list.draw()
 
-        # Put the text on the screen.
-        output = f"Score: {self.score}"
-        arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
+    def on_key_press(self, key, modifiers):
+        """Called whenever a key is pressed. """
 
-    def on_mouse_motion(self, x, y, dx, dy):
-        """ Handle Mouse Motion """
+        if key == arcade.key.UP:
+            self.player_sprite.change_y = MOVEMENT_SPEED
+        elif key == arcade.key.DOWN:
+            self.player_sprite.change_y = -MOVEMENT_SPEED
+        elif key == arcade.key.LEFT:
+            self.player_sprite.change_x = -MOVEMENT_SPEED
+        elif key == arcade.key.RIGHT:
+            self.player_sprite.change_x = MOVEMENT_SPEED
 
-        # Move the center of the player sprite to match the mouse x, y
-        self.player_sprite.center_x = x
-        self.player_sprite.center_y = y
+    def on_key_release(self, key, modifiers):
+        """Called when the user releases a key. """
+
+        if key == arcade.key.UP or key == arcade.key.DOWN:
+            self.player_sprite.change_y = 0
+        elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
+            self.player_sprite.change_x = 0
 
     def on_update(self, delta_time):
         """ Movement and game logic """
 
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
-        self.coin_list.update()
+        self.physics_engine.update()
 
-        # Generate a list of all sprites that collided with the player.
-        coins_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
-
-        # Loop through each colliding sprite, remove it, and add to the score.
-        for coin in coins_hit_list:
-            coin.remove_from_sprite_lists()
-            self.score += 1
-
-        # Check length of coin list. If it is zero, flip to the
-        # game over view.
-        if len(self.coin_list) == 0:
-            view = GameOverView()
-            self.window.show_view(view)
+        # Do some logic here to figure out what room we are in, and if we need to go
+        # to a different room.
+        if self.player_sprite.center_x > SCREEN_WIDTH and self.current_room == 0:
+            self.current_room = 1
+            self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
+                                                             self.rooms[self.current_room].wall_list)
+            self.player_sprite.center_x = 0
+        elif self.player_sprite.center_x < 0 and self.current_room == 1:
+            self.current_room = 0
+            self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
+                                                             self.rooms[self.current_room].wall_list)
+            self.player_sprite.center_x = SCREEN_WIDTH
 
 
 def main():
     """ Main function """
-
-    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    start_view = InstructionView()
-    window.show_view(start_view)
+    window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    window.setup()
     arcade.run()
 
 
